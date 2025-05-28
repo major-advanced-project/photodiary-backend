@@ -31,7 +31,7 @@ public class ImageUploadController {
                     .message((String) result.getOrDefault("message", ""))
                     .imageCount((Integer) result.getOrDefault("imageCount", 0))
                     .privacy((String) result.getOrDefault("privacy", "private"))
-                    .content((String) result.getOrDefault("content", ""))
+                    .content((List) result.getOrDefault("content", ""))
                     .build();
 
             return ResponseEntity.ok(responseDto);
@@ -44,7 +44,7 @@ public class ImageUploadController {
                             .message("이미지 처리 중 오류 발생")
                             .imageCount(0)
                             .privacy(privacy)
-                            .content("")
+                            .content(null)
                             .build()
             );
         }

@@ -32,18 +32,19 @@ public class ImageProcessService {
 
         for (MultipartFile image : images) {
             File file = convertToFile(image);
-            body.add("images", new FileSystemResource(file));
+            body.add("files", new FileSystemResource(file));
         }
 
         body.add("privacy", privacy);
 
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
-        String fastApiUrl = "http://localhost:5000/process";
+        String fastApiUrl = "http://localhost:8000/process-images";
         ResponseEntity<Map> response = restTemplate.postForEntity(fastApiUrl, requestEntity, Map.class);
 
         Map<String, Object> fastApiResult = response.getBody();
         if (fastApiResult == null) {
+            System.out.println("fastApiResult가 비어있습니다.");
             fastApiResult = new HashMap<>();
         }
 
@@ -52,7 +53,7 @@ public class ImageProcessService {
         result.put("message", "이미지가 성공적으로 처리되었습니다.");
         result.put("imageCount", images.size());
         result.put("privacy", privacy);
-        result.put("content", fastApiResult.getOrDefault("content", "일기 내용이 비어있습니다."));
+        result.put("content", fastApiResult.getOrDefault("results", "일기 내용이 비어있습니다."));
 
         return result;
     }

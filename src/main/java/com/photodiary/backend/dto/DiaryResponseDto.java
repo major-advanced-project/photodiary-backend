@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.List;
+
 @Getter
 @AllArgsConstructor
 @Builder
@@ -12,5 +14,5 @@ public class DiaryResponseDto {
     private String message;
     private int imageCount;
     private String privacy;
-    private String content;
+    private List content;
 }
