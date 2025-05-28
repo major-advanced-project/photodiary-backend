@@ -12,8 +12,19 @@ spring:
       web:
         resources:
           add-mappings: false
+
+  # 업로드 가능 용량 증대
+  servlet:
+    multipart:
+      max-file-size: 3MB
+      max-request-size: 4MB
+
+kakao:
+  api:
+    key: ${KAKAO_API_KEY}
+
 ---
-# ???? ???? DB
+# 로컬 DB
 spring:
   config:
     activate:
