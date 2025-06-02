@@ -26,19 +26,13 @@ public class Blip2ModelApi {
         this.restTemplate = new RestTemplate();
     }
 
-    public List<ImageWithDescription> retreiveImageDescirptions(List<MultipartFile> images) {
+    public List<ImageWithDescription> retreiveImageDescirptions(List<File> images) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
 
-        for (MultipartFile image : images) {
-            File file = null;
-            try {
-                file = convertToFile(image);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            body.add("files", new FileSystemResource(file));
+        for (File image : images) {
+            body.add("files", new FileSystemResource(image));
         }
 
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
@@ -47,13 +41,5 @@ public class Blip2ModelApi {
         System.out.println(response.getResults().get(0));
 
         return response.getResults();
-    }
-
-    private File convertToFile(MultipartFile multipartFile) throws IOException {
-        File convFile = File.createTempFile("upload_", "_" + multipartFile.getOriginalFilename());
-        try (FileOutputStream fos = new FileOutputStream(convFile)) {
-            fos.write(multipartFile.getBytes());
-        }
-        return convFile;
     }
 }
