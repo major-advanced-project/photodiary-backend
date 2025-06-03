@@ -46,8 +46,10 @@ public class DiaryService {
 
         // todo GPT에게 전달할 요청을 생성
 
+        String prompt = ChatgptPromptBuilder.buildDiaryPrompt(imageWithDescriptions);
+
         // todo GPT에게 일기 생성 요청
-        chatgptApi.retrieveDiary();
+        chatgptApi.retrieveDiary(prompt);
 
         // 임시 파일 삭제
         renamedImages.stream().forEach(File::delete);

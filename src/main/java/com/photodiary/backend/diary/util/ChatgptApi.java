@@ -4,6 +4,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ChatgptApi {
-    public void retrieveDiary() {
+    public void retrieveDiary(String prompt) {
     }
 }
