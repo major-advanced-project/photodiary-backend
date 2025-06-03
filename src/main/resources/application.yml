@@ -23,6 +23,10 @@ kakao:
   api:
     key: ${KAKAO_API_KEY}
 
+
+openai:
+  api-key: ${OPENAI_API_KEY}
+
 ---
 # 로컬 DB
 spring:
