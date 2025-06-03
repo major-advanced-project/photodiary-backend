@@ -1,6 +1,8 @@
 package com.photodiary.backend.diary.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.photodiary.backend.diary.dto.ImageWithDescription;
 
 import java.util.Comparator;
@@ -25,6 +27,9 @@ public class ChatgptPromptBuilder {
 
         try {
             ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule());
+            mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
             String jsonBody = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(imageRecords);
 
             return String.join("\n\n", EMOTIONAL_DIARY_PROMPT_HEADER, jsonBody);
