@@ -20,6 +20,8 @@ public class Diary extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String title;
+
     @Lob
     @Column(length=256)
     private String content;
