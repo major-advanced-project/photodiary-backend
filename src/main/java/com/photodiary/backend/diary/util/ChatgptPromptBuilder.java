@@ -3,7 +3,7 @@ package com.photodiary.backend.diary.util;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.photodiary.backend.diary.dto.ImageWithDescription;
+import com.photodiary.backend.diary.dto.ImageDiaryItem;
 
 import java.util.Comparator;
 import java.util.List;
@@ -20,10 +20,10 @@ public class ChatgptPromptBuilder {
             "입력은 아래 JSON입니다:"
     );
 
-    public static String buildDiaryPrompt(List<ImageWithDescription> imageRecords) {
+    public static String buildDiaryPrompt(List<ImageDiaryItem> imageRecords) {
 
         //{파일명,설명,시간,장소}로 돼있는 LIST를 시간 기준으로 나눔
-//        imageRecords.sort(Comparator.comparing(ImageWithDescription::getDatetime));
+        imageRecords.sort(Comparator.comparing(ImageDiaryItem::getDatetime));
 
         try {
             ObjectMapper mapper = new ObjectMapper();

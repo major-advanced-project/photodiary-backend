@@ -1,5 +1,6 @@
 package com.photodiary.backend.diary.controller;
 
+import com.photodiary.backend.diary.dto.DiaryContentResponse;
 import com.photodiary.backend.diary.service.DiaryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,12 +20,12 @@ public class DiaryController {
     private final DiaryService diaryService;
 
     @PostMapping
-    public ResponseEntity<Object> createDairy(List<MultipartFile> files, boolean isPublic){
+    public ResponseEntity<DiaryContentResponse> createDairy(List<MultipartFile> files){
         if(files == null){
             log.info("[createDiary] files is null");
             return ResponseEntity.badRequest().build();
         }
-        diaryService.createDiary(files, isPublic);
-        return ResponseEntity.ok().build();
+        DiaryContentResponse response = diaryService.createDiary(files);
+        return ResponseEntity.ok(response);
     }
 }
