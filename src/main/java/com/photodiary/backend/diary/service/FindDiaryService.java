@@ -7,7 +7,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -21,5 +23,12 @@ public class FindDiaryService {
             throw new RuntimeException("일기가 존재하지 않습니다");
         }
         return FindDiaryResponseDto.entityToDto(opt.get());
+    }
+
+    public List<FindDiaryResponseDto> findUserDairyList(long userId) {
+        List<Diary> diaryList = diaryRepository.findAllByUserId(userId);
+        return diaryList.stream()
+                .map(FindDiaryResponseDto::entityToDto)
+                .collect(Collectors.toList());
     }
 }
