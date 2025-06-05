@@ -12,6 +12,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -37,6 +38,6 @@ public class Blip2ModelApi {
 
         System.out.println(response.getResults().get(0));
 
-        return response.getResults();
+        return new ArrayList<>(response.getResults());
     }
 }

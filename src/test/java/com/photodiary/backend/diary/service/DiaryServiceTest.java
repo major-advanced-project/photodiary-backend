@@ -1,5 +1,6 @@
 package com.photodiary.backend.diary.service;
 
+import com.photodiary.backend.diary.dto.DiaryTitleAndContent;
 import com.photodiary.backend.diary.dto.ImageDiaryItem;
 import com.photodiary.backend.diary.util.ChatgptApi;
 import com.photodiary.backend.diary.util.ChatgptPromptBuilder;
@@ -24,10 +25,10 @@ public class DiaryServiceTest {
                         LocalDateTime.parse("2025-05-29T08:15:00"), "서울특별시 광진구 자양동"),
                 new ImageDiaryItem("img2.jpg", "단풍이 짙게 물든 공원에서 자전거를 타는 아이.",
                         LocalDateTime.parse("2025-05-29T09:00:00"), "서울특별시 광진구 자양동"),
-                new ImageDiaryItem("img3.jpg", "조용한 카페 테라스에서 책을 읽으며 커피를 마시는 사람.",
-                        LocalDateTime.parse("2025-05-29T09:45:00"), "서울특별시 광진구 자양동 카페거리"),
                 new ImageDiaryItem("img4.jpg", "강가 산책로를 따라 조깅하는 사람들, 바람에 흔들리는 나뭇잎.",
                         LocalDateTime.parse("2025-05-29T10:20:00"), "서울특별시 광진구 자양나루공원"),
+                new ImageDiaryItem("img3.jpg", "조용한 카페 테라스에서 책을 읽으며 커피를 마시는 사람.",
+                        LocalDateTime.parse("2025-05-29T09:45:00"), "서울특별시 광진구 자양동 카페거리"),
                 new ImageDiaryItem("img5.jpg", "맑은 하늘과 구름이 한강 수면에 아름답게 반사되고 있다.",
                         LocalDateTime.parse("2025-05-29T11:00:00"), "서울특별시 광진구 한강변")
         );
@@ -37,7 +38,7 @@ public class DiaryServiceTest {
         System.out.println("==== GENERATED PROMPT ====\n" + prompt);
 
         // 3. GPT API 호출
-        String diary = chatgptApi.retrieveDiary(prompt);
+        DiaryTitleAndContent diary = chatgptApi.retrieveDiary(prompt);
         System.out.println("==== GPT RESPONSE ====\n" + diary);
     }
 }

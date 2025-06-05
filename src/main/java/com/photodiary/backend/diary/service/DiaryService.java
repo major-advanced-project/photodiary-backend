@@ -1,6 +1,6 @@
 package com.photodiary.backend.diary.service;
 
-import com.photodiary.backend.diary.dto.DiaryContentResponse;
+import com.photodiary.backend.diary.dto.DiaryTitleAndContent;
 import com.photodiary.backend.diary.dto.ImageDiaryItem;
 import com.photodiary.backend.diary.util.*;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ public class DiaryService {
     private final Blip2ModelApi blip2ModelApi;
     private final ChatgptApi chatgptApi;
 
-    public DiaryContentResponse createDiary(List<MultipartFile> files) {
+    public DiaryTitleAndContent generateDiary(List<MultipartFile> files) {
         // 각 파일에 유일한 이름을 부여하기 위해서 임시파일 생성
         List<File> renamedImages = files.stream()
                 .map(multipartFile -> convertToRenamedTempFile(multipartFile))
@@ -57,13 +57,13 @@ public class DiaryService {
         String prompt = ChatgptPromptBuilder.buildDiaryPrompt(imageDiaryItems);
 
         // todo GPT에게 일기 생성 요청
-        String diaryContent = chatgptApi.retrieveDiary(prompt);
+        DiaryTitleAndContent diaryTitleAndContent = chatgptApi.retrieveDiary(prompt);
 
         // 임시 파일 삭제
         renamedImages.stream().forEach(File::delete);
 
         // todo 클라이언트에게 일기 생성 결과 반환
-        return new DiaryContentResponse(diaryContent);
+        return diaryTitleAndContent;
 
     }
 
