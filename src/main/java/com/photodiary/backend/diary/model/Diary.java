@@ -3,14 +3,12 @@ package com.photodiary.backend.diary.model;
 import com.photodiary.backend.global.common.model.BaseEntity;
 import com.photodiary.backend.user.model.User;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
