@@ -4,12 +4,16 @@ import com.photodiary.backend.global.common.model.BaseEntity;
 import com.photodiary.backend.user.model.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 @Entity
 public class Diary extends BaseEntity {
     @Id
