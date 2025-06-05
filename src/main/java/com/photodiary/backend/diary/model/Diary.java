@@ -1,6 +1,7 @@
 package com.photodiary.backend.diary.model;
 
 import com.photodiary.backend.global.common.model.BaseEntity;
+import com.photodiary.backend.user.model.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -21,7 +22,11 @@ public class Diary extends BaseEntity {
 
     private boolean isPublic;
 
+    @ManyToOne
+    @JoinColumn(name = "userId")
+    private User user;
+
     @OneToMany(orphanRemoval = true)
-    @JoinColumn(name = "diary_id")
+    @JoinColumn(name = "diaryId")
     private List<Image> images = new ArrayList<>();
 }
