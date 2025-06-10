@@ -20,7 +20,7 @@ import java.util.List;
 @Component
 public class Blip2ModelApi {
     private RestTemplate restTemplate;
-    private String fastApiUrl = "http://localhost:8000/process-images";
+    private String fastApiUrl = "https://0c4d-210-106-232-127.ngrok-free.app/process-images";
 
     public Blip2ModelApi() {
         this.restTemplate = new RestTemplate();

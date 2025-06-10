@@ -6,27 +6,17 @@ spring:
       local: local-db
     active: local
 
-  # 업로드 가능 용량 증대
   servlet:
     multipart:
       max-file-size: 3MB
       max-request-size: 4MB
 
-kakao:
-  api:
-    key: ${KAKAO_API_KEY}
-
----
-# 로컬 DB
-spring:
-  config:
-    activate:
-      on-profile: local-db
   datasource:
-    url: ${LOCAL_DATASOURCE_URL}
-    username: ${LOCAL_DATASOURCE_USERNAME}
-    password: ${LOCAL_DATASOURCE_PASSWORD}
-    driver-class-name: org.h2.Driver
+    url: jdbc:mysql://photodiary.chiciye68pa4.ap-northeast-2.rds.amazonaws.com:3306/photodiary
+    username: devuser
+    password: photopass123!
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
   jpa:
     hibernate:
       ddl-auto: create
@@ -35,4 +25,17 @@ spring:
         format_sql: true
         show_sql: true
         highlight_sql: true
-        dialect: org.hibernate.dialect.H2Dialect
+        dialect: org.hibernate.dialect.MySQLDialect
+
+cloud:
+  aws:
+    s3:
+      bucket: photodiary-image-bucket
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+
+kakao:
+  api:
+    key: 66a9a980e11125a18339f31fd49fc39c
