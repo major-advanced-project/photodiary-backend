@@ -12,9 +12,9 @@ spring:
       max-request-size: 4MB
 
   datasource:
-    url: jdbc:mysql://photodiary.chiciye68pa4.ap-northeast-2.rds.amazonaws.com:3306/photodiary
-    username: devuser
-    password: photopass123!
+    url: ${DB_URL}                # ✅ 환경변수
+    username: ${DB_USERNAME}      # ✅ 환경변수
+    password: ${DB_PASSWORD}      # ✅ 환경변수
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
@@ -29,6 +29,9 @@ spring:
 
 cloud:
   aws:
+    credentials:
+      access-key: ${AWS_ACCESS_KEY}      # ✅ 환경변수
+      secret-key: ${AWS_SECRET_KEY}      # ✅ 환경변수
     s3:
       bucket: photodiary-image-bucket
     region:
@@ -38,4 +41,4 @@ cloud:
 
 kakao:
   api:
-    key: 66a9a980e11125a18339f31fd49fc39c
+    key: ${KAKAO_API_KEY}        # ✅ 환경변수
