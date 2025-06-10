@@ -3,11 +3,9 @@ package com.photodiary.backend.friend.model;
 import com.photodiary.backend.global.common.model.BaseEntity;
 import com.photodiary.backend.user.model.User;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
