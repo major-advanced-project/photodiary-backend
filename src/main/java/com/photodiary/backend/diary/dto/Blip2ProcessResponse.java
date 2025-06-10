@@ -8,5 +8,5 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class Blip2ProcessResponse {
-    List<ImageWithDescription> results;
+    List<ImageDiaryItem> results;
 }

@@ -1,19 +1,22 @@
 package com.photodiary.backend.diary.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
 @ToString
-public class ImageWithDescription {
+@AllArgsConstructor
+@Setter
+public class ImageDiaryItem {
     @JsonProperty(value = "filename")
     private String filename;
 
     @JsonProperty(value = "caption")
     private String description;
+
+    private LocalDateTime datetime;
+    private String location;
 }

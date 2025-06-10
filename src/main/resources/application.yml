@@ -42,3 +42,7 @@ cloud:
 kakao:
   api:
     key: ${KAKAO_API_KEY}        # ✅ 환경변수
+
+
+openai:
+  api-key: ${OPENAI_API_KEY}
