@@ -1,6 +1,7 @@
 package com.photodiary.backend.auth.dto;
 
 public record LoginResponseDto(
-        boolean success
+        boolean success,
+        String accessToken
 ) {
 }
