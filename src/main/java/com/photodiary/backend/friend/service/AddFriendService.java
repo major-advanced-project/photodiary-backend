@@ -1,5 +1,6 @@
 package com.photodiary.backend.friend.service;
 
+import com.photodiary.backend.friend.Exception.CannotAddYourselfAsFriendException;
 import com.photodiary.backend.friend.Exception.FriendAlreadyExistsException;
 import com.photodiary.backend.friend.dto.AddFriendResponseDto;
 import com.photodiary.backend.friend.model.Friend;
@@ -19,14 +20,18 @@ public class AddFriendService {
     private final UserRepository userRepository;
 
     @Transactional
-    public AddFriendResponseDto addFriend(Long userId, Long friendId) {
+    public AddFriendResponseDto addFriend(Long userId, String email) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자입니다."));
-        User friend = userRepository.findById(friendId)
+        User friend = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자입니다."));
 
         boolean exists = friendRepository.existsByUserAndFriend(user, friend) ||
                 friendRepository.existsByUserAndFriend(friend, user);
+
+        if(user.equals(friend)) {
+            throw new CannotAddYourselfAsFriendException("나 자신을 친구로 추가할 수 없습니다.");
+        }
 
         if (exists) {
             throw new FriendAlreadyExistsException("이미 등록된 친구입니다.");
@@ -40,7 +45,7 @@ public class AddFriendService {
 
         friendRepository.save(friendRelation);
 
-        return AddFriendResponseDto.from(userId, friendId);
+        return AddFriendResponseDto.from(userId, friend.getId());
     }
 
 
