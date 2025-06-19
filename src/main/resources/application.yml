@@ -4,34 +4,19 @@ spring:
   profiles:
     group:
       local: local-db
-    active: local
+      dev: dev-db
+    active: local   # 로컬에서 기본 실행
 
   servlet:
     multipart:
       max-file-size: 3MB
       max-request-size: 4MB
 
-  datasource:
-    url: ${DB_URL}                # ✅ 환경변수
-    username: ${DB_USERNAME}      # ✅ 환경변수
-    password: ${DB_PASSWORD}      # ✅ 환경변수
-    driver-class-name: com.mysql.cj.jdbc.Driver
-
-  jpa:
-    hibernate:
-      ddl-auto: create
-    properties:
-      hibernate:
-        format_sql: true
-        show_sql: true
-        highlight_sql: true
-        dialect: org.hibernate.dialect.MySQLDialect
-
 cloud:
   aws:
     credentials:
-      access-key: ${AWS_ACCESS_KEY}      # ✅ 환경변수
-      secret-key: ${AWS_SECRET_KEY}      # ✅ 환경변수
+      access-key: ${AWS_ACCESS_KEY}
+      secret-key: ${AWS_SECRET_KEY}
     s3:
       bucket: photodiary-image-bucket
     region:
@@ -41,8 +26,7 @@ cloud:
 
 kakao:
   api:
-    key: ${KAKAO_API_KEY}        # ✅ 환경변수
-
+    key: ${KAKAO_API_KEY}
 
 openai:
   api-key: ${OPENAI_API_KEY}
