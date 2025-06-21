@@ -21,10 +21,16 @@ public class AddFriendService {
 
     @Transactional
     public AddFriendResponseDto addFriend(Long userId, String email) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자입니다."));
-        User friend = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자입니다."));
+        User user = null;
+        User friend = null;
+        try {
+            user = userRepository.findById(userId)
+                    .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자입니다."));
+            friend = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자입니다."));
+        } catch (UserNotFoundException e) {
+            throw new RuntimeException(e);
+        }
 
         boolean exists = friendRepository.existsByUserAndFriend(user, friend) ||
                 friendRepository.existsByUserAndFriend(friend, user);
