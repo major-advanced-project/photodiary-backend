@@ -1,5 +1,8 @@
 package com.photodiary.backend.friend.service;
 
+import com.photodiary.backend.friend.Exception.AlreadyRespondedException;
+import com.photodiary.backend.friend.Exception.UnauthorizedFriendActionException;
+import com.photodiary.backend.friend.dto.FriendRequestActionDto;
 import com.photodiary.backend.friend.dto.FriendRequestResponseDto;
 import com.photodiary.backend.friend.model.Friend;
 import com.photodiary.backend.friend.model.FriendStatus;
@@ -9,6 +12,7 @@ import com.photodiary.backend.user.model.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,6 +36,7 @@ public class FriendRequestService {
                 .map(friend -> {
                     User sender = friend.getUser(); // 요청 보낸 사람
                     return FriendRequestResponseDto.builder()
+                            .id(friend.getId())
                             .username(sender.getUsername())
                             .email(sender.getEmail())
                             .requestedAt(friend.getCreatedAt().toLocalDate())
@@ -55,6 +60,7 @@ public class FriendRequestService {
                 .map(friend -> {
                     User receiver = friend.getFriend();
                     return FriendRequestResponseDto.builder()
+                            .id(friend.getId())
                             .username(receiver.getUsername())
                             .email(receiver.getEmail())
                             .requestedAt(friend.getCreatedAt().toLocalDate())
@@ -63,5 +69,30 @@ public class FriendRequestService {
                 })
                 .collect(Collectors.toList());
     }
+
+    @Transactional
+    public void respondToFriendRequest(Long friendRequestId, Long userId, FriendRequestActionDto.FriendAction action) {
+
+        Friend friendRequest = friendRepository.findById(friendRequestId)
+                .orElseThrow(() -> new NoFriendRequestException("친구 요청이 존재하지 않습니다."));
+
+        // 요청받은 사람인지 확인
+        if (!friendRequest.getFriend().getId().equals(userId)) {
+            throw new UnauthorizedFriendActionException("해당 요청에 대한 권한이 없습니다.");
+        }
+
+        if (friendRequest.getStatus() != FriendStatus.REQUESTED) {
+            throw new AlreadyRespondedException("이미 처리된 요청입니다.");
+        }
+
+        if (action == FriendRequestActionDto.FriendAction.ACCEPT) {
+            friendRequest.setStatus(FriendStatus.ACCEPTED);
+        } else if (action == FriendRequestActionDto.FriendAction.DECLINE) {
+            friendRequest.setStatus(FriendStatus.DECLINED);
+        }
+
+        // save는 JPA가 변경 감지로 생략 가능
+    }
+
 }
 
