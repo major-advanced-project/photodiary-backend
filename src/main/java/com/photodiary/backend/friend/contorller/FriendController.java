@@ -1,5 +1,6 @@
 package com.photodiary.backend.friend.contorller;
 
+import com.photodiary.backend.diary.dto.FindDiaryResponseDto;
 import com.photodiary.backend.friend.Exception.CannotAddYourselfAsFriendException;
 import com.photodiary.backend.friend.Exception.FriendAlreadyExistsException;
 import com.photodiary.backend.friend.Exception.NoFriendFoundException;
@@ -25,6 +26,7 @@ public class FriendController {
     private final FindFriendService findFriendService;
     private final AddFriendService addFriendService;
 
+    //친구 목록조회
     @GetMapping()
     public ResponseEntity<?> findFriendList() {
         log.info("[GET] /friends - 친구 목록 조회");
@@ -50,6 +52,21 @@ public class FriendController {
             AddFriendResponseDto result = addFriendService.addFriend(userId, dto.getEmail());
             return ResponseEntity.ok(result);
         } catch (UserNotFoundException | FriendAlreadyExistsException | CannotAddYourselfAsFriendException e) {
+            return ResponseEntity.badRequest().body(
+                    Map.of("message", e.getMessage())
+            );
+        }
+    }
+
+    // 친구 일기 상세 조회
+    @GetMapping("/{diaryId}")
+    public ResponseEntity<?> findDiary(@PathVariable long diaryId) {
+        log.info("[findDiary] diaryId = {}", diaryId);
+
+        try {
+            FindDiaryResponseDto result = findFriendService.findFriendDiary(diaryId);
+            return ResponseEntity.ok(result);
+        } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(
                     Map.of("message", e.getMessage())
             );
