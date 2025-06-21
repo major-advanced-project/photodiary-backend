@@ -7,6 +7,7 @@ import com.photodiary.backend.diary.service.DiaryService;
 import com.photodiary.backend.diary.service.SaveDiaryService;
 import com.photodiary.backend.diary.service.UpdateDiaryService;
 import com.photodiary.backend.global.exception.CustomException;
+import com.photodiary.backend.global.jwt.annotation.LoginUserId;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -37,8 +38,7 @@ public class DiaryController {
     }
 
     @PatchMapping("/{diaryId}")
-    public ResponseEntity<Object> updateDiary(@PathVariable long diaryId, @RequestBody UpdateDiaryRequestDto request){
-        long userId = 1L;
+    public ResponseEntity<Object> updateDiary(@PathVariable long diaryId, @RequestBody UpdateDiaryRequestDto request, @LoginUserId Long userId){
         log.info("[updateDiary] diaryId = {} userId = {}", diaryId, userId);
         try{
             updateDiaryService.updateDiary(userId, diaryId, request);
@@ -51,8 +51,7 @@ public class DiaryController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> saveDiary(@RequestPart List<MultipartFile> images, @RequestPart SaveDiaryRequestDto request){
-        long userId = 1L;
+    public ResponseEntity<Object> saveDiary(@RequestPart List<MultipartFile> images, @RequestPart SaveDiaryRequestDto request,@LoginUserId Long userId){
         saveDiaryService.save(userId, images, request);
         return ResponseEntity.ok(Map.of("message", "success"));
     }

@@ -12,6 +12,7 @@ import com.photodiary.backend.friend.service.FindFriendService;
 import com.photodiary.backend.global.exception.EmptyDiaryList;
 import com.photodiary.backend.global.exception.NotFriendRelation;
 import com.photodiary.backend.global.exception.UserNotFoundException;
+import com.photodiary.backend.global.jwt.annotation.LoginUserId;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -30,9 +31,8 @@ public class FriendController {
 
     //친구 목록조회
     @GetMapping()
-    public ResponseEntity<?> findFriendList() {
+    public ResponseEntity<?> findFriendList(@LoginUserId Long userId) {
         log.info("[GET] /friends - 친구 목록 조회");
-        long userId = 1L;
 
         try {
             List<FindFriendResponseDto> friendList = findFriendService.findFriendList(userId);
@@ -46,8 +46,7 @@ public class FriendController {
 
     // 친구 추가
     @PostMapping
-    public ResponseEntity<?> addFriend(@RequestBody AddFriendRequestDto dto) {
-        long userId = 1L;
+    public ResponseEntity<?> addFriend(@RequestBody AddFriendRequestDto dto,@LoginUserId Long userId) {
         log.info("[POST] /friends/{}/{} - 친구 추가 요청", userId, dto.getEmail());
 
         try {
@@ -77,10 +76,9 @@ public class FriendController {
 
     //친구 일기 목록 조회
     @GetMapping("/diarys")
-    public ResponseEntity<?> findFriendDiaryList(@RequestParam long friendId) {
+    public ResponseEntity<?> findFriendDiaryList(@RequestParam long friendId,@LoginUserId Long userId) {
         log.info("[findFriendDiaryList]");
 
-        long userId = 1L;
 
         try{
             List<FindDiaryResponseDto> diaryResponseDtoList = findFriendService.findFriendDairyList(userId,friendId);
