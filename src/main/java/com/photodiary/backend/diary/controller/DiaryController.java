@@ -1,8 +1,10 @@
 package com.photodiary.backend.diary.controller;
 
+import com.photodiary.backend.diary.dto.SaveDiaryRequestDto;
 import com.photodiary.backend.diary.dto.DiaryTitleAndContent;
 import com.photodiary.backend.diary.dto.UpdateDiaryRequestDto;
 import com.photodiary.backend.diary.service.DiaryService;
+import com.photodiary.backend.diary.service.SaveDiaryService;
 import com.photodiary.backend.diary.service.UpdateDiaryService;
 import com.photodiary.backend.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ import java.util.Map;
 public class DiaryController {
     private final DiaryService diaryService;
     private final UpdateDiaryService updateDiaryService;
+    private final SaveDiaryService saveDiaryService;
 
     @PostMapping("/generate")
     public ResponseEntity<DiaryTitleAndContent> generateDiary(List<MultipartFile> files){
@@ -45,5 +48,12 @@ public class DiaryController {
             log.error("[updateDiary] message = {}", e.getMessage());
             return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
         }
+    }
+
+    @PostMapping
+    public ResponseEntity<Object> saveDiary(@RequestPart List<MultipartFile> images, @RequestPart SaveDiaryRequestDto request){
+        long userId = 1L;
+        saveDiaryService.save(userId, images, request);
+        return ResponseEntity.ok(Map.of("message", "success"));
     }
 }
