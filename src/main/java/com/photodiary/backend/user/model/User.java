@@ -23,4 +23,8 @@ public class User extends BaseEntity {
 
     @Column(nullable = false)
     private String username;
+
+    public boolean isSame(long userId) {
+        return id == userId;
+    }
 }

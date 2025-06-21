@@ -33,4 +33,13 @@ public class Diary extends BaseEntity {
     @OneToMany(orphanRemoval = true)
     @JoinColumn(name = "diaryId")
     private List<Image> images = new ArrayList<>();
+
+    public boolean isWriter(long userId) {
+        return user.isSame(userId);
+    }
+
+    public void update(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 }
