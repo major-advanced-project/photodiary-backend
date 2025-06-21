@@ -1,7 +1,9 @@
 package com.photodiary.backend.diary.controller;
 
 import com.photodiary.backend.diary.dto.DiaryTitleAndContent;
+import com.photodiary.backend.diary.dto.UpdateDiaryRequestDto;
 import com.photodiary.backend.diary.service.DiaryService;
+import com.photodiary.backend.diary.service.UpdateDiaryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ import java.util.Map;
 @RestController
 public class DiaryController {
     private final DiaryService diaryService;
+    private final UpdateDiaryService updateDiaryService;
 
     @PostMapping("/generate")
     public ResponseEntity<DiaryTitleAndContent> generateDiary(List<MultipartFile> files){
@@ -29,14 +32,11 @@ public class DiaryController {
         return ResponseEntity.ok(response);
     }
 
-//    @PostMapping("/generate2")
-//    public ResponseEntity<Map<String, Object>> mockGenerateDiary() {
-//        return ResponseEntity.ok(Map.of(
-//                "success", true,
-//                "title", "하루의 시작",
-//                "content", "오늘은 고양이와 산책하며 하루를 시작했다."
-//        ));
-//    }
-
-
+    @PatchMapping("/{diaryId}")
+    public ResponseEntity<Object> updateDiary(@RequestParam long diaryId, @RequestBody UpdateDiaryRequestDto request){
+        long userId = 1L;
+        log.info("[updateDiary] diaryId = {} userId = {}", diaryId, userId);
+        updateDiaryService.updateDiary(userId, diaryId, request);
+        return ResponseEntity.ok(Map.of("message", "success"));
+    }
 }
