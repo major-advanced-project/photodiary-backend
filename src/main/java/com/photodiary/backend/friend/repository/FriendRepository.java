@@ -25,8 +25,12 @@ public interface FriendRepository extends JpaRepository<Friend, Long> {
     //이미 친구 상태인지 확인
     boolean existsByUserAndFriend(User user, User friend);
 
-    //요청된 친구 확인
+    //요청 받은 친구 확인 (나 <- 친구)
     List<Friend> findAllByFriendIdAndStatus(Long userId, FriendStatus status);
+
+    //요청 보낸 친구확인 (나 -> 친구)
+    List<Friend> findAllByUserIdAndStatus(Long userId, FriendStatus status);
+
 
 
 }

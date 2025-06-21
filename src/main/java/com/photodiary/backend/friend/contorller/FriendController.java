@@ -11,6 +11,7 @@ import com.photodiary.backend.friend.dto.FriendRequestResponseDto;
 import com.photodiary.backend.friend.service.AddFriendService;
 import com.photodiary.backend.friend.service.FindFriendService;
 import com.photodiary.backend.friend.service.FriendRequestService;
+import com.photodiary.backend.global.exception.CustomException;
 import com.photodiary.backend.global.exception.EmptyDiaryList;
 import com.photodiary.backend.global.exception.NotFriendRelation;
 import com.photodiary.backend.global.exception.UserNotFoundException;
@@ -95,10 +96,29 @@ public class FriendController {
 
     // 받은 친구 요청 목록 조회
     @GetMapping("/received")
-    public ResponseEntity<List<FriendRequestResponseDto>> getReceivedFriendRequests(
+    public ResponseEntity<?> getReceivedFriendRequests(
             @LoginUserId Long userId) {
-        List<FriendRequestResponseDto> requests = friendRequestService.getReceivedFriendRequests(userId);
-        return ResponseEntity.ok(requests);
+
+        try{
+            List<FriendRequestResponseDto> requests = friendRequestService.getReceivedFriendRequests(userId);
+            return ResponseEntity.ok(requests);
+        }catch (CustomException e) {
+            return ResponseEntity.badRequest().body(
+                    Map.of("message", e.getMessage())
+            );
+        }
+    }
+
+    @GetMapping("/sent")
+    public ResponseEntity<?> getSentFriendRequests(@LoginUserId Long userId) {
+        try{
+            List<FriendRequestResponseDto> requests = friendRequestService.getSentFriendRequests(userId);
+            return ResponseEntity.ok(requests);
+        } catch (CustomException e) {
+            return ResponseEntity.badRequest().body(
+                    Map.of("message", e.getMessage())
+            );
+        }
     }
 
 }

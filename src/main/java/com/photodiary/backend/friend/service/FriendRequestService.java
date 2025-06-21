@@ -4,13 +4,12 @@ import com.photodiary.backend.friend.dto.FriendRequestResponseDto;
 import com.photodiary.backend.friend.model.Friend;
 import com.photodiary.backend.friend.model.FriendStatus;
 import com.photodiary.backend.friend.repository.FriendRepository;
-import com.photodiary.backend.global.exception.NoFriendRequestException;
+import com.photodiary.backend.friend.Exception.NoFriendRequestException;
 import com.photodiary.backend.user.model.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,7 +26,7 @@ public class FriendRequestService {
         if (requests.isEmpty()) {
             throw new NoFriendRequestException("받은 친구 요청이 없습니다.");
         }
-        
+
 
         return requests.stream()
                 .map(friend -> {
@@ -35,6 +34,27 @@ public class FriendRequestService {
                     return FriendRequestResponseDto.builder()
                             .username(sender.getUsername())
                             .email(sender.getEmail())
+                            .requestedAt(friend.getCreatedAt().toLocalDate())
+                            .build();
+                })
+                .collect(Collectors.toList());
+    }
+
+    public List<FriendRequestResponseDto> getSentFriendRequests(Long userId) {
+
+        //내가 보낸 친구 요청 목록 가져오기
+        List<Friend> sentRequests = friendRepository.findAllByUserIdAndStatus(userId, FriendStatus.REQUESTED);
+        if (sentRequests.isEmpty()) {
+            throw new NoFriendRequestException("보낸 친구 요청이 없습니다.");
+        }
+
+        // 응답
+        return sentRequests.stream()
+                .map(friend -> {
+                    User receiver = friend.getFriend(); // 요청 받은 사람
+                    return FriendRequestResponseDto.builder()
+                            .username(receiver.getUsername())
+                            .email(receiver.getEmail())
                             .requestedAt(friend.getCreatedAt().toLocalDate())
                             .build();
                 })
