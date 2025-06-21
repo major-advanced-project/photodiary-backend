@@ -35,6 +35,7 @@ public class FriendRequestService {
                             .username(sender.getUsername())
                             .email(sender.getEmail())
                             .requestedAt(friend.getCreatedAt().toLocalDate())
+                            .status(friend.getStatus())
                             .build();
                 })
                 .collect(Collectors.toList());
@@ -43,7 +44,8 @@ public class FriendRequestService {
     public List<FriendRequestResponseDto> getSentFriendRequests(Long userId) {
 
         //내가 보낸 친구 요청 목록 가져오기
-        List<Friend> sentRequests = friendRepository.findAllByUserIdAndStatus(userId, FriendStatus.REQUESTED);
+        List<FriendStatus> statuses = List.of(FriendStatus.REQUESTED, FriendStatus.DECLINED);
+        List<Friend> sentRequests = friendRepository.findAllByUserIdAndStatusIn(userId, statuses);
         if (sentRequests.isEmpty()) {
             throw new NoFriendRequestException("보낸 친구 요청이 없습니다.");
         }
@@ -51,11 +53,12 @@ public class FriendRequestService {
         // 응답
         return sentRequests.stream()
                 .map(friend -> {
-                    User receiver = friend.getFriend(); // 요청 받은 사람
+                    User receiver = friend.getFriend();
                     return FriendRequestResponseDto.builder()
                             .username(receiver.getUsername())
                             .email(receiver.getEmail())
                             .requestedAt(friend.getCreatedAt().toLocalDate())
+                            .status(friend.getStatus()) // 상태 포함
                             .build();
                 })
                 .collect(Collectors.toList());
