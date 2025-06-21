@@ -61,7 +61,7 @@ public class FriendController {
     }
 
     // 친구 일기 상세 조회
-    @GetMapping("/{diaryId}")
+    @GetMapping("diarys/{diaryId}")
     public ResponseEntity<?> findDiary(@PathVariable long diaryId) {
         log.info("[findDiary] diaryId = {}", diaryId);
 
