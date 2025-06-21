@@ -17,7 +17,7 @@ import java.util.Map;
 @CrossOrigin(origins = "http://localhost:3000")
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/diary")
+@RequestMapping("/diarys")
 @RestController
 public class DiaryController {
     private final DiaryService diaryService;
