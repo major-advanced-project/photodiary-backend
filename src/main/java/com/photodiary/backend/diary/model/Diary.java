@@ -30,8 +30,9 @@ public class Diary extends BaseEntity {
     @JoinColumn(name = "userId")
     private User user;
 
-    @OneToMany(orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.PERSIST, orphanRemoval = true)
     @JoinColumn(name = "diaryId")
+    @Builder.Default
     private List<Image> images = new ArrayList<>();
 
     public boolean isWriter(long userId) {
@@ -41,5 +42,9 @@ public class Diary extends BaseEntity {
     public void update(String title, String content) {
         this.title = title;
         this.content = content;
+    }
+
+    public void addImage(Image image){
+        images.add(image);
     }
 }
