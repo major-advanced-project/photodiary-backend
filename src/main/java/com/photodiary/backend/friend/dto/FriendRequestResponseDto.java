@@ -7,10 +7,10 @@ import java.time.LocalDate;
 
 @Builder
 public record FriendRequestResponseDto(
+        Long id,
         String username,
         String email,
         LocalDate requestedAt,
-        FriendStatus status // 추가된 필드
-
+        FriendStatus status
 ) {
 }
