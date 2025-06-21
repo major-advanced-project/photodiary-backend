@@ -4,6 +4,7 @@ import com.photodiary.backend.diary.dto.DiaryTitleAndContent;
 import com.photodiary.backend.diary.dto.UpdateDiaryRequestDto;
 import com.photodiary.backend.diary.service.DiaryService;
 import com.photodiary.backend.diary.service.UpdateDiaryService;
+import com.photodiary.backend.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -33,10 +34,16 @@ public class DiaryController {
     }
 
     @PatchMapping("/{diaryId}")
-    public ResponseEntity<Object> updateDiary(@RequestParam long diaryId, @RequestBody UpdateDiaryRequestDto request){
+    public ResponseEntity<Object> updateDiary(@PathVariable long diaryId, @RequestBody UpdateDiaryRequestDto request){
         long userId = 1L;
         log.info("[updateDiary] diaryId = {} userId = {}", diaryId, userId);
-        updateDiaryService.updateDiary(userId, diaryId, request);
-        return ResponseEntity.ok(Map.of("message", "success"));
+        try{
+            updateDiaryService.updateDiary(userId, diaryId, request);
+            return ResponseEntity.ok(Map.of("message", "success"));
+        }
+        catch (CustomException e){
+            log.error("[updateDiary] message = {}", e.getMessage());
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        }
     }
 }
