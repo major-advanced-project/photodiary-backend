@@ -11,12 +11,12 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @RequiredArgsConstructor
+@Transactional
 @Service
 public class UpdateDiaryService {
 
     private final DiaryRepository diaryRepository;
 
-    @Transactional
     public void updateDiary(long userId, long diaryId, UpdateDiaryRequestDto request) {
         Diary diary = diaryRepository.findById(diaryId).orElseThrow(() -> new UserDiaryNotFoundException("존재하지 않는 일기입니다"));
 
@@ -24,6 +24,6 @@ public class UpdateDiaryService {
             throw new UserDiaryNotFoundException("존재하지 않는 일기입니다");
         }
 
-        diary.update(request.title(), request.content());
+        diary.update(request.title(), request.content(), request.isPublic());
     }
 }
