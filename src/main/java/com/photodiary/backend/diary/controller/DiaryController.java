@@ -28,11 +28,12 @@ public class DiaryController {
     private final SaveDiaryService saveDiaryService;
 
     @PostMapping("/generate")
-    public ResponseEntity<DiaryTitleAndContent> generateDiary(List<MultipartFile> files){
-        if(files == null){
-            log.info("[generate] files is null");
-            return ResponseEntity.badRequest().build();
+    public ResponseEntity<DiaryTitleAndContent> generateDiary(@RequestParam("images") List<MultipartFile> files) {
+        if (files == null || files.isEmpty()) {
+            log.info("[generate] images is null or empty");
+            return ResponseEntity.badRequest().body(null);
         }
+
         DiaryTitleAndContent response = diaryService.generateDiary(files);
         return ResponseEntity.ok(response);
     }
