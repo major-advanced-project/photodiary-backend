@@ -38,24 +38,26 @@ public class DiaryService {
 
         for (int i = 0; i < files.size(); i++) {
             MultipartFile multipartFile = files.get(i);
+            File imageFile = renamedImages.get(i);  // 기존에 생성한 임시 파일 재활용
 
-            // 메타데이터 추출
-            metadataExtractor.extractMetadata(multipartFile);
+            // ✅ 메타데이터 추출 (MultipartFile → File 기반으로 변경)
+            metadataExtractor.extractMetadata(imageFile);
             LocalDateTime dateTime = metadataExtractor.getDateTime();
             GpsCoordinate gpsCoordinate = metadataExtractor.getGpsCoordinate();
 
             // 장소명 추출
             String placeName = kakaoMapApi.retrievePlaceName(gpsCoordinate);
-            System.out.println("placeName = " + placeName);
 
             // imageDiaryItems에 날짜 및 장소 정보 추가
             ImageDiaryItem item = imageDiaryItems.get(i);
             item.setDatetime(dateTime);
             item.setLocation(placeName);
-            // S3 업로드 후 이미지 URL 받기
+
+            // ✅ S3 업로드용 MultipartFile은 그대로 사용
             String imageUrl = s3Uploader.upload(multipartFile);
-            System.out.println("imageUrl = " + imageUrl);
+
         }
+
 
         // todo GPT에게 전달할 요청을 생성
 

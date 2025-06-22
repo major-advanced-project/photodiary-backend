@@ -3,78 +3,97 @@ package com.photodiary.backend.diary.util;
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
 import com.drew.lang.GeoLocation;
+import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
+import com.drew.metadata.Tag;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
 import com.drew.metadata.exif.GpsDirectory;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.Optional;
 
 @Component
 public class MetadataExtractor {
-    Metadata metadata;
 
-    public void extractMetadata(MultipartFile multipartFile) {
+    private Metadata metadata;
+
+    public void extractMetadata(File file) {
         try {
-            metadata = ImageMetadataReader.readMetadata(multipartFile.getInputStream());
-        } catch (ImageProcessingException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            this.metadata = ImageMetadataReader.readMetadata(file);
+            System.out.println("메타데이터 추출 성공: " + file.getName());
+
+            // 디버깅용 전체 태그 출력
+            for (Directory directory : metadata.getDirectories()) {
+                for (Tag tag : directory.getTags()) {
+                    System.out.println(tag);
+                }
+            }
+
+        } catch (ImageProcessingException | IOException e) {
+            System.out.println("메타데이터 추출 실패: " + e.getMessage());
+            this.metadata = null;
         }
     }
 
     public LocalDateTime getDateTime() {
-        if(metadata == null || metadata.hasErrors()){
-            throw new RuntimeException("메타데이터가 없습니다.");
+        if (metadata == null) {
+            System.out.println("메타데이터가 없습니다. 현재 시간 반환");
+            return LocalDateTime.now();
         }
 
         ExifSubIFDDirectory directory = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);
         if (directory == null) {
-            throw new RuntimeException("EXIF 정보를 찾을 수 없습니다.");
+            System.out.println("EXIF 디렉토리 없음. 현재 시간 반환");
+            return LocalDateTime.now();
         }
 
-        Date date = directory.getDateOriginal(); // 촬영 시간
+        // 1. DateOriginal → 2. DateDigitized → 3. DateModified 순으로 fallback
+        Date date = Optional.ofNullable(directory.getDateOriginal())
+                .orElseGet(() -> Optional.ofNullable(directory.getDateDigitized())
+                        .orElseGet(() -> directory.getDateModified()));
+
         if (date == null) {
-            throw new RuntimeException("촬영 시간 정보가 없습니다.");
+            System.out.println("촬영 시간 없음. 현재 시간 반환");
+            return LocalDateTime.now();
         }
-        System.out.println("촬영 시간: " + date);
 
-        LocalDateTime localDateTime = date.toInstant()   // Date -> Instant
-                .atZone(ZoneId.systemDefault())  // Instant -> ZonedDateTime
+        System.out.println("📷 촬영 시간: " + date);
+
+        return date.toInstant()
+                .atZone(ZoneId.systemDefault())
                 .toLocalDateTime();
-
-        return localDateTime;
     }
 
-    public GpsCoordinate getGpsCoordinate(){
-        if(metadata == null || metadata.hasErrors()){
-            throw new RuntimeException("메타데이터가 없습니다.");
+    public GpsCoordinate getGpsCoordinate() {
+        if (metadata == null) {
+            System.out.println("메타데이터 없음. GPS 좌표 반환 실패");
+            return null;
         }
 
         GpsDirectory gpsDirectory = metadata.getFirstDirectoryOfType(GpsDirectory.class);
         if (gpsDirectory == null) {
-            throw new RuntimeException("GPS 정보가 없습니다.");
+            System.out.println("GPS 디렉토리 없음. GPS 좌표 반환 실패");
+            return null;
         }
 
         GeoLocation location = gpsDirectory.getGeoLocation();
-        if(location == null){
-            throw new RuntimeException("위치 정보가 없습니다.");
+        if (location == null || Double.isNaN(location.getLatitude()) || Double.isNaN(location.getLongitude())) {
+            System.out.println("위치 정보 없음 또는 잘못된 좌표");
+            return null;
         }
 
-        double latitude = location.getLatitude();
-        double longitude = location.getLongitude();
-
-        System.out.println("위도 (Latitude): " + latitude);
-        System.out.println("경도 (Longitude): " + longitude);
 
         GpsCoordinate gpsPoint = new GpsCoordinate();
-        gpsPoint.longitude = longitude;
-        gpsPoint.latitude = latitude;
+        gpsPoint.latitude = location.getLatitude();
+        gpsPoint.longitude = location.getLongitude();
+
+        System.out.printf("📍 위도: %.6f, 경도: %.6f\n", gpsPoint.latitude, gpsPoint.longitude);
+
         return gpsPoint;
     }
 }

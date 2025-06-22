@@ -20,7 +20,8 @@ public class DiaryController {
     private final DiaryService diaryService;
 
     @PostMapping("/generate")
-    public ResponseEntity<DiaryTitleAndContent> generateDiary(List<MultipartFile> files){
+    public ResponseEntity<DiaryTitleAndContent> generateDiary(@RequestParam("files") List<MultipartFile> files) {
+
         if(files == null){
             log.info("[generate] files is null");
             return ResponseEntity.badRequest().build();

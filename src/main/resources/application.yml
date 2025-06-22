@@ -6,10 +6,16 @@ spring:
       local: local-db
     active: local
 
+    messages:
+      encoding: UTF-8
+    mvc:
+      locale: ko
+      locale-resolver: fixed
+
   servlet:
     multipart:
-      max-file-size: 3MB
-      max-request-size: 4MB
+      max-file-size: 200MB
+      max-request-size: 200MB
 
   datasource:
     url: ${DB_URL}                # ✅ 환경변수
