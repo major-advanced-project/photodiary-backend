@@ -39,9 +39,10 @@ public class Diary extends BaseEntity {
         return user.isSame(userId);
     }
 
-    public void update(String title, String content) {
+    public void update(String title, String content, boolean isPublic) {
         this.title = title;
         this.content = content;
+        this.isPublic = isPublic;
     }
 
     public void addImage(Image image){

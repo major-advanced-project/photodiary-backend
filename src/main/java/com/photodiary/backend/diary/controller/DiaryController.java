@@ -55,4 +55,13 @@ public class DiaryController {
         saveDiaryService.save(userId, images, request);
         return ResponseEntity.ok(Map.of("message", "success"));
     }
+
+    @PostMapping("/generate2")
+    public ResponseEntity<Map<String, Object>> mockGenerateDiary() {
+        return ResponseEntity.ok(Map.of(
+                "success", true,
+                "title", "하루의 시작",
+                "content", "오늘은 고양이와 산책하며 하루를 시작했다."
+        ));
+    }
 }
