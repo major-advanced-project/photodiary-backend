@@ -1,6 +1,7 @@
 package com.photodiary.backend.friend.repository;
 
 import com.photodiary.backend.friend.model.Friend;
+import com.photodiary.backend.friend.model.FriendStatus;
 import com.photodiary.backend.user.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -23,6 +24,12 @@ public interface FriendRepository extends JpaRepository<Friend, Long> {
 
     //이미 친구 상태인지 확인
     boolean existsByUserAndFriend(User user, User friend);
+
+    //요청 받은 친구 확인 (나 <- 친구)
+    List<Friend> findAllByFriendIdAndStatus(Long userId, FriendStatus status);
+
+    //요청 보낸 친구확인 (나 -> 친구)
+    List<Friend> findAllByUserIdAndStatusIn(Long userId, List<FriendStatus> statuses);
 
 
 }

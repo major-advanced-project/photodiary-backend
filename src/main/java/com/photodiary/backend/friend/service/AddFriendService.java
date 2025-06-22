@@ -46,7 +46,7 @@ public class AddFriendService {
         Friend friendRelation = Friend.builder()
                 .user(user)
                 .friend(friend)
-                .status(FriendStatus.ACCEPTED)
+                .status(FriendStatus.REQUESTED)
                 .build();
 
         friendRepository.save(friendRelation);
