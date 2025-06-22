@@ -22,7 +22,7 @@ public class AuthInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             response.setHeader("Access-Control-Allow-Origin", "https://ku-photodiary.vercel.app");
-            response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+            response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS");
             response.setHeader("Access-Control-Allow-Headers", "*");
             response.setStatus(HttpServletResponse.SC_OK);
             return false; // OPTIONS 요청은 여기서 끝냄
