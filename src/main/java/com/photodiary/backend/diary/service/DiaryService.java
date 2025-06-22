@@ -39,23 +39,31 @@ public class DiaryService {
         for (int i = 0; i < files.size(); i++) {
             MultipartFile multipartFile = files.get(i);
 
-            // 메타데이터 추출
-            metadataExtractor.extractMetadata(multipartFile);
+            // 1. 메타데이터 추출을 위한 임시 파일 생성
+            File tempFile = convertToRenamedTempFile(multipartFile);  // 이미 만든 함수 활용
+
+            // 2. 메타데이터 추출
+            metadataExtractor.extractMetadata(tempFile);
             LocalDateTime dateTime = metadataExtractor.getDateTime();
             GpsCoordinate gpsCoordinate = metadataExtractor.getGpsCoordinate();
 
-            // 장소명 추출
+            // 3. 장소명 추출
             String placeName = kakaoMapApi.retrievePlaceName(gpsCoordinate);
             System.out.println("placeName = " + placeName);
 
-            // imageDiaryItems에 날짜 및 장소 정보 추가
+            // 4. 정보 주입
             ImageDiaryItem item = imageDiaryItems.get(i);
             item.setDatetime(dateTime);
             item.setLocation(placeName);
-            // S3 업로드 후 이미지 URL 받기
+
+            // 5. 이미지 URL 저장 (S3 업로드는 여전히 MultipartFile로 진행)
             String imageUrl = s3Uploader.upload(multipartFile);
             System.out.println("imageUrl = " + imageUrl);
+
+            // 6. 메타데이터용 임시 파일 삭제
+            tempFile.delete();
         }
+
 
         // todo GPT에게 전달할 요청을 생성
 
@@ -82,6 +90,17 @@ public class DiaryService {
         }
         catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private File convertToFile(MultipartFile multipartFile) {
+        try {
+            String originalFilename = multipartFile.getOriginalFilename();
+            File convFile = File.createTempFile("temp_", originalFilename);
+            multipartFile.transferTo(convFile);
+            return convFile;
+        } catch (IOException e) {
+            throw new RuntimeException("MultipartFile -> File 변환 실패", e);
         }
     }
 }
