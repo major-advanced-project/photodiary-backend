@@ -66,7 +66,7 @@ public class FindFriendService{
                 .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자입니다."));
         List<Diary> diaryList = diaryRepository.findAllByUserId(friendId);
 
-        if(!friendRepository.existsByUserAndFriend(user,friend)){
+        if(! (friendRepository.existsByUserAndFriend(user,friend)||friendRepository.existsByUserAndFriend(friend,user))){
             throw new NotFriendRelation("친구 관계가 아닙니다.");
         }
 
