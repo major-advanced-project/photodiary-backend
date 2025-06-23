@@ -68,7 +68,8 @@ public class MetadataExtractor {
         }
 
         System.out.println("[📷] 촬영 시간 추출됨: " + date);
-        return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        return date.toInstant().atZone(ZoneId.of("Asia/Seoul")).toLocalDateTime();
+
     }
 
     /**

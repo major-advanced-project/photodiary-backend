@@ -37,6 +37,7 @@ public class DiaryService {
         List<ImageDiaryItem> imageDiaryItems = blip2ModelApi.retreiveImageDescirptions(renamedImages);
 
         for (int i = 0; i < files.size(); i++) {
+            System.out.println("description : " + imageDiaryItems.get(i).getDescription());
             MultipartFile multipartFile = files.get(i);
 
             // 1. 메타데이터 추출을 위한 임시 파일 생성
@@ -48,7 +49,7 @@ public class DiaryService {
             GpsCoordinate gpsCoordinate = metadataExtractor.getGpsCoordinate();
 
             // 3. 장소명 추출
-            String placeName = kakaoMapApi.retrievePlaceName(gpsCoordinate);
+            String placeName = kakaoMapApi.retrieveAddressJson(gpsCoordinate);
             System.out.println("placeName = " + placeName);
 
             // 4. 정보 주입
