@@ -39,4 +39,6 @@ photodiary:
       expiredMs: ${PHOTODIARY_JWT_ACCESS_EXPIREDMS}
     refresh:
       expiredMs: ${PHOTODIARY_JWT_REFRESH_EXPIREDMS}
+  fastapi:
+    url: ${BLIP2_SERVER_URL}
 
