@@ -11,18 +11,27 @@ spring:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
-
+  cloud:
+    aws:
+      credentials:
+        access-key: ${AWS_ACCESS_KEY_ID}
+        secret-key: ${AWS_SECRET_ACCESS_KEY}
+      region:
+        static: ap-northeast-2
+        
 cloud:
   aws:
     credentials:
-      access-key: ${AWS_ACCESS_KEY}
-      secret-key: ${AWS_SECRET_KEY}
+      access-key: ${AWS_ACCESS_KEY_ID}
+      secret-key: ${AWS_SECRET_ACCESS_KEY}
     s3:
       bucket: photodiary-image-bucket
     region:
       static: ap-northeast-2
     stack:
       auto: false
+
+
 
 kakao:
   api:
