@@ -55,5 +55,7 @@ public class AuthInterceptor implements HandlerInterceptor {
             writer.write(json);
             writer.flush();
         }
+
+        response.flushBuffer();
     }
 }
