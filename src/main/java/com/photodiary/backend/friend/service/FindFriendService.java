@@ -3,6 +3,8 @@ package com.photodiary.backend.friend.service;
 import com.photodiary.backend.diary.dto.FindDiaryResponseDto;
 import com.photodiary.backend.diary.model.Diary;
 import com.photodiary.backend.diary.repository.DiaryRepository;
+import com.photodiary.backend.friend.dto.FindFriendByIdResponse;
+import com.photodiary.backend.friend.dto.FriendRequestResponseDto;
 import com.photodiary.backend.global.exception.EmptyDiaryList;
 import com.photodiary.backend.friend.Exception.NoFriendFoundException;
 import com.photodiary.backend.friend.Exception.NotPublicDiary;
@@ -78,5 +80,18 @@ public class FindFriendService{
                 .filter(Diary::isPublic)        //기존 일기 조회에서 친구일기 조회일때 public을 확인하는 filter추가
                 .map(FindDiaryResponseDto::entityToDto)
                 .collect(Collectors.toList());
+    }
+
+    public FindFriendByIdResponse findFriendById(Long friendId) {
+        Optional<User> user =  userRepository.findById(friendId);
+
+        if(user.isEmpty()){
+            throw new UserNotFoundException("해당 유저가 없습니다.");
+        }
+
+
+        return FindFriendByIdResponse.builder()
+                .username(user.get().getUsername())
+                .build();
     }
 }

@@ -141,6 +141,20 @@ public class FriendController {
 
     }
 
+    @GetMapping("/{friendId}")
+    public ResponseEntity<?> findFriendById(@PathVariable Long friendId) {
+        log.info("[findFriendById] friendId = {}", friendId);
+
+        try{
+            FindFriendByIdResponse requests = findFriendService.findFriendById(friendId);
+            return ResponseEntity.ok(requests);
+        } catch (CustomException e) {
+            return ResponseEntity.badRequest().body(
+                    Map.of("message", e.getMessage())
+            );
+        }
+    }
+
 
 }
 
