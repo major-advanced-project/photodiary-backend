@@ -46,16 +46,6 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     // JSON 에러 메시지 응답 메서드
     private void writeErrorResponse(HttpServletResponse response, String message, int statusCode) throws IOException {
-        response.setStatus(statusCode);
-        response.setContentType("application/json;charset=UTF-8");
-
-        String json = String.format("{\"message\": \"%s\"}", message);
-
-        try (PrintWriter writer = response.getWriter()) {
-            writer.write(json);
-            writer.flush();
-        }
-
-        response.flushBuffer();
+        response.sendError(statusCode, message);
     }
 }
