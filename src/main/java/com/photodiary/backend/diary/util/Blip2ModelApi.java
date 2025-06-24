@@ -2,6 +2,7 @@ package com.photodiary.backend.diary.util;
 
 import com.photodiary.backend.diary.dto.Blip2ProcessResponse;
 import com.photodiary.backend.diary.dto.ImageDiaryItem;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -18,7 +19,9 @@ import java.util.List;
 @Component
 public class Blip2ModelApi {
     private RestTemplate restTemplate;
-    private String fastApiUrl = "https://1df1-14-39-80-161.ngrok-free.app/process-images";
+
+    @Value("${photodiary.fastapi.url}")
+    private String fastApiUrl;
 
     public Blip2ModelApi() {
         this.restTemplate = new RestTemplate();
@@ -34,7 +37,7 @@ public class Blip2ModelApi {
         }
 
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
-        Blip2ProcessResponse response = restTemplate.postForEntity(fastApiUrl, requestEntity, Blip2ProcessResponse.class).getBody();
+        Blip2ProcessResponse response = restTemplate.postForEntity(fastApiUrl + "/process-images", requestEntity, Blip2ProcessResponse.class).getBody();
 
         System.out.println(response.getResults().get(0));
 
