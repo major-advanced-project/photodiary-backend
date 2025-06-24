@@ -3,6 +3,7 @@ package com.photodiary.backend.diary.controller;
 import com.photodiary.backend.diary.dto.SaveDiaryRequestDto;
 import com.photodiary.backend.diary.dto.DiaryTitleAndContent;
 import com.photodiary.backend.diary.dto.UpdateDiaryRequestDto;
+import com.photodiary.backend.diary.exception.MetadataNotFoundExcpetion;
 import com.photodiary.backend.diary.service.DiaryService;
 import com.photodiary.backend.diary.service.SaveDiaryService;
 import com.photodiary.backend.diary.service.UpdateDiaryService;
@@ -28,14 +29,19 @@ public class DiaryController {
     private final SaveDiaryService saveDiaryService;
 
     @PostMapping("/generate")
-    public ResponseEntity<DiaryTitleAndContent> generateDiary(@RequestParam("images") List<MultipartFile> files) {
+    public ResponseEntity<Object> generateDiary(@RequestParam("images") List<MultipartFile> files) {
         if (files == null || files.isEmpty()) {
             log.info("[generate] images is null or empty");
             return ResponseEntity.badRequest().body(null);
         }
-
-        DiaryTitleAndContent response = diaryService.generateDiary(files);
-        return ResponseEntity.ok(response);
+        try{
+            DiaryTitleAndContent response = diaryService.generateDiary(files);
+            return ResponseEntity.ok(response);
+        }
+        catch (MetadataNotFoundExcpetion e){
+            log.error("[generateDiary] 메타데이터 없음으로 실패");
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        }
     }
 
     @PatchMapping("/{diaryId}")

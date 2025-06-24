@@ -8,6 +8,7 @@ import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
 import com.drew.metadata.exif.GpsDirectory;
+import com.photodiary.backend.diary.exception.MetadataNotFoundExcpetion;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -39,7 +40,8 @@ public class MetadataExtractor {
 
         } catch (ImageProcessingException | IOException e) {
             System.err.println("[❌] 메타데이터 추출 실패: " + e.getMessage());
-            this.metadata = null;
+            throw new MetadataNotFoundExcpetion("메타데이터가 없습니다.");
+//            this.metadata = null;
         }
     }
 
@@ -49,13 +51,15 @@ public class MetadataExtractor {
     public LocalDateTime getDateTime() {
         if (metadata == null) {
             System.out.println("[⚠️] 메타데이터 없음 → 현재 시간 반환");
-            return LocalDateTime.now();
+            throw new MetadataNotFoundExcpetion("시간 메타데이터가 없습니다.");
+//            return LocalDateTime.now();
         }
 
         ExifSubIFDDirectory directory = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);
         if (directory == null) {
             System.out.println("[⚠️] EXIF 디렉토리 없음 → 현재 시간 반환");
-            return LocalDateTime.now();
+            throw new MetadataNotFoundExcpetion("시간 메타데이터가 없습니다.");
+//            return LocalDateTime.now();
         }
 
         Date date = Optional.ofNullable(directory.getDateOriginal())
@@ -64,7 +68,8 @@ public class MetadataExtractor {
 
         if (date == null) {
             System.out.println("[⚠️] 촬영 시간 없음 → 현재 시간 반환");
-            return LocalDateTime.now();
+            throw new MetadataNotFoundExcpetion("시간 메타데이터가 없습니다.");
+//            return LocalDateTime.now();
         }
 
         System.out.println("[📷] 촬영 시간 추출됨: " + date);
@@ -78,19 +83,22 @@ public class MetadataExtractor {
     public GpsCoordinate getGpsCoordinate() {
         if (metadata == null) {
             System.out.println("[⚠️] 메타데이터 없음 → GPS 좌표 추출 실패");
-            return null;
+            throw new MetadataNotFoundExcpetion("장소 메타데이터가 없습니다.");
+//            return null;
         }
 
         GpsDirectory gpsDirectory = metadata.getFirstDirectoryOfType(GpsDirectory.class);
         if (gpsDirectory == null) {
             System.out.println("[⚠️] GPS 디렉토리 없음 → GPS 좌표 추출 실패");
-            return null;
+            throw new MetadataNotFoundExcpetion("장소 메타데이터가 없습니다.");
+//            return null;
         }
 
         GeoLocation location = gpsDirectory.getGeoLocation();
         if (location == null || Double.isNaN(location.getLatitude()) || Double.isNaN(location.getLongitude())) {
             System.out.println("[⚠️] GPS 정보 없음 또는 잘못된 좌표");
-            return null;
+            throw new MetadataNotFoundExcpetion("장소 메타데이터가 없습니다.");
+//            return null;
         }
 
         GpsCoordinate gpsPoint = new GpsCoordinate();

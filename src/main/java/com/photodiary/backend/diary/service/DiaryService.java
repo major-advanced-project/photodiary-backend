@@ -25,9 +25,10 @@ public class DiaryService {
     private final KakaoMapApi kakaoMapApi;
     private final Blip2ModelApi blip2ModelApi;
     private final ChatgptApi chatgptApi;
-    private final S3Uploader s3Uploader;
 
     public DiaryTitleAndContent generateDiary(List<MultipartFile> files) {
+        log.info("[generateDiary] 일기 생성 시작");
+
         // 각 파일에 유일한 이름을 부여하기 위해서 임시파일 생성
         List<File> renamedImages = files.stream()
                 .map(multipartFile -> convertToRenamedTempFile(multipartFile))
@@ -35,6 +36,9 @@ public class DiaryService {
 
         // todo BLIP2 서버 호출 후 텍스트 변환 결과 받기
         List<ImageDiaryItem> imageDiaryItems = blip2ModelApi.retreiveImageDescirptions(renamedImages);
+
+        log.info("[generateDiary] blip2 응답 완료");
+
 
         for (int i = 0; i < files.size(); i++) {
             System.out.println("description : " + imageDiaryItems.get(i).getDescription());
@@ -57,13 +61,11 @@ public class DiaryService {
             item.setDatetime(dateTime);
             item.setLocation(placeName);
 
-            // 5. 이미지 URL 저장 (S3 업로드는 여전히 MultipartFile로 진행)
-            String imageUrl = s3Uploader.upload(multipartFile);
-            System.out.println("imageUrl = " + imageUrl);
-
-            // 6. 메타데이터용 임시 파일 삭제
+            // 5. 메타데이터용 임시 파일 삭제
             tempFile.delete();
         }
+
+        log.info("[generateDiary] 카카오 서버 응답 완료");
 
 
         // todo GPT에게 전달할 요청을 생성
@@ -72,6 +74,7 @@ public class DiaryService {
 
         // todo GPT에게 일기 생성 요청
         DiaryTitleAndContent diaryTitleAndContent = chatgptApi.retrieveDiary(prompt);
+        log.info("[generateDiary] GPT 응답 완료");
 
         // 임시 파일 삭제
         renamedImages.stream().forEach(File::delete);
