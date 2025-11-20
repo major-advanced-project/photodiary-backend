@@ -1,4 +1,4 @@
-📸 PhotoDiary Backend
+# 📸 PhotoDiary Backend
 
 AI 기반 자동 일기 생성 & 사진 기록 서비스 백엔드 서버
 
@@ -10,7 +10,7 @@ AI 기반 자동 일기 생성 & 사진 기록 서비스 백엔드 서버
 
 <img width="545" height="296" alt="image" src="https://github.com/user-attachments/assets/c320e2f1-7d58-4af0-9510-e83b02b46387" />
 
-🚀 주요 기능
+## 🚀 주요 기능
 | 구분                    | 기능 목록                                                                                                      |
 | --------------------- | ---------------------------------------------------------------------------------------------------------- |
 | **회원가입 & 로그인**        | - 이메일 기반 회원가입<br>- JWT 기반 인증/인가<br>- 비밀번호 암호화<br>- 중복 이메일 체크                                               |
@@ -20,7 +20,7 @@ AI 기반 자동 일기 생성 & 사진 기록 서비스 백엔드 서버
 <img width="568" height="501" alt="스크린샷 2025-11-20 오후 5 16 49" src="https://github.com/user-attachments/assets/5d9e60e4-93a4-4a92-b52a-c4d861a593c9" />
 
 
-🧠 기술 스택
+## 🧠 기술 스택
 | 영역            | 사용 기술                                                                                                                             |
 | ------------- | --------------------------------------------------------------------------------------------------------------------------------- |
 | **Backend**   | Java 17<br>Spring Boot<br>Spring Data JPA<br>Spring Security + JWT<br>metadata-extractor (EXIF 분석)<br>OpenAI GPT<br>Kakao Map API |
@@ -28,18 +28,18 @@ AI 기반 자동 일기 생성 & 사진 기록 서비스 백엔드 서버
 | **Infra**     | AWS EC2 (Backend)<br>AWS S3 (이미지 저장)<br>AWS RDS (MySQL)                                                                           |
 
 
-🧬 시스템 아키텍처
+## 🧬 시스템 아키텍처
 <img width="1008" height="634" alt="image" src="https://github.com/user-attachments/assets/8987ff83-8446-4dd6-a8be-31b0195901b8" />
 
 
-🛠 API 요약
-Auth API
+## 🛠 API 요약
+### Auth API
 | 메서드  | 엔드포인트              | 설명          |
 | ---- | ------------------ | ----------- |
 | POST | `/api/auth/signup` | 회원가입        |
 | POST | `/api/auth/login`  | 로그인(JWT 발급) |
 
-Diary API
+### Diary API
 | 메서드  | 엔드포인트                 | 설명       |
 | ---- | --------------------- | -------- |
 | POST | `/api/diary/generate` | 자동 일기 생성 |
@@ -48,14 +48,14 @@ Diary API
 | GET  | `/api/diary/{id}`     | 일기 상세    |
 | PUT  | `/api/diary/{id}`     | 일기 수정    |
 
-Friend API
+### Friend API
 | 메서드  | 엔드포인트                          | 설명          |
 | ---- | ------------------------------ | ----------- |
 | POST | `/api/friend`                  | 친구 추가       |
 | GET  | `/api/friend/list`             | 친구 목록       |
 | GET  | `/api/friend/{friendId}/diary` | 친구 공개 일기 조회 |
 
-📡 AI 서버 연동 흐름
+## 📡 AI 서버 연동 흐름
 | 단계               | 설명                                        |
 | ---------------- | ----------------------------------------- |
 | **1. 이미지 업로드**   | User → Backend : 사용자 이미지 업로드              |
@@ -68,11 +68,11 @@ Friend API
 
 
 
-🗄 ERD
+## 🗄 ERD
 <img width="1072" height="898" alt="image" src="https://github.com/user-attachments/assets/1fde39d7-02b5-4d56-8b9e-51fce2a5fe50" />
 
 
-⚙ 실행 방법
+## ⚙ 실행 방법
 | 항목               | 변수명                                                                                     |
 | ---------------- | --------------------------------------------------------------------------------------- |
 | **JWT 설정**       | `JWT_SECRET`                                                                            |
@@ -83,7 +83,7 @@ Friend API
 | **Kakao API 설정** | `KAKAO_REST_API_KEY`                                                                    |
 
 
-⚙ 빌드 & 실행
+## ⚙ 빌드 & 실행
 
 | 단계          | 명령어                                           |
 | ----------- | --------------------------------------------- |
@@ -93,7 +93,7 @@ Friend API
 
 
 
-🔍 테스트 결과 요약
+## 🔍 테스트 결과 요약
 | 항목       | 결과                      |
 | -------- | ----------------------- |
 | 회원가입/로그인 | 정상                      |
@@ -102,14 +102,14 @@ Friend API
 | 친구 기능    | 정상                      |
 | AWS 인프라  | 평균 응답속도 300ms           |
 
-👥 팀원
+## 👥 팀원
 | 이름  | 역할                    |
 | --- | --------------------- |
 | 김민석 | GPT 일기 생성, API 개발     |
 | 남경식 | BLIP2 서버, AWS 인프라     |
 | 장익환 | 백엔드 API, FE-서버 연동, 배포 |
 
-📌 향후 개선 방향
+## 📌 향후 개선 방향
 | 항목                 | 내용                              |
 | ------------------ | ------------------------------- |
 | **BLIP2 모델 고도화**   | 고성능 BLIP2 모델 적용으로 이미지 캡셔닝 품질 향상 |
@@ -118,7 +118,7 @@ Friend API
 | **AI 파이프라인 속도 개선** | 전체 이미지 → 캡션 → GPT 흐름 속도 최적화     |
 
 
-📎 관련 저장소
+## 📎 관련 저장소
 | 영역              | Repository                                                                                                                           |
 | --------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | Backend         | [https://github.com/major-advanced-project/photodiary-backend](https://github.com/major-advanced-project/photodiary-backend)         |
