@@ -9,17 +9,7 @@ AI 기반 자동 일기 생성 & 사진 기록 서비스 백엔드 서버
 프론트엔드(Next.js/React) 및 AI 서버(FastAPI)와 연동됩니다.
 
 📂 프로젝트 구조
-photodiary-backend
- ├── src
- │   ├── controller      # API 엔드포인트
- │   ├── service         # 비즈니스 로직
- │   ├── repository      # JPA Repository
- │   ├── domain          # Entity
- │   ├── jwt             # JWT 토큰 생성/검증
- │   ├── modules         # ImageToText / KakaoMap 등 연동 모듈
- │   └── dto             # 요청/응답 DTO
- ├── build.gradle
- └── application.yml
+
 
 🚀 주요 기능
 | 구분                    | 기능 목록                                                                                                      |
@@ -134,7 +124,3 @@ Friend API
 | Frontend        | [https://github.com/major-advanced-project/photodiary-frontend](https://github.com/major-advanced-project/photodiary-frontend)       |
 | BLIP2 AI Server | [https://github.com/major-advanced-project/photodiary-blip-server](https://github.com/major-advanced-project/photodiary-blip-server) |
 
-
-Frontend	https://github.com/major-advanced-project/photodiary-frontend
-
-BLIP2 AI Server	https://github.com/major-advanced-project/photodiary-blip-server
