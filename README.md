@@ -8,8 +8,7 @@ AI 기반 자동 일기 생성 & 사진 기록 서비스 백엔드 서버
 백엔드는 Spring Boot + MySQL + AWS 인프라 + JWT 인증 구조로 구성되어 있으며
 프론트엔드(Next.js/React) 및 AI 서버(FastAPI)와 연동됩니다.
 
-📂 프로젝트 구조
-
+<img width="545" height="296" alt="image" src="https://github.com/user-attachments/assets/c320e2f1-7d58-4af0-9510-e83b02b46387" />
 
 🚀 주요 기능
 | 구분                    | 기능 목록                                                                                                      |
@@ -22,11 +21,11 @@ AI 기반 자동 일기 생성 & 사진 기록 서비스 백엔드 서버
 
 
 🧠 기술 스택
-| 영역            | 사용 기술                                                                                              |
-| ------------- | -------------------------------------------------------------------------------------------------- |
-| **Backend**   | Java 17<br>Spring Boot<br>Spring Data JPA<br>Spring Security + JWT<br>metadata-extractor (EXIF 분석) |
-| **AI Server** | FastAPI<br>BLIP2 이미지 캡셔닝<br>OpenAI GPT<br>Kakao Map API                                            |
-| **Infra**     | AWS EC2 (Backend)<br>AWS S3 (이미지 저장)<br>AWS RDS (MySQL)                                            |
+| 영역            | 사용 기술                                                                                                                             |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| **Backend**   | Java 17<br>Spring Boot<br>Spring Data JPA<br>Spring Security + JWT<br>metadata-extractor (EXIF 분석)<br>OpenAI GPT<br>Kakao Map API |
+| **AI Server** | FastAPI<br>BLIP2 이미지 캡셔닝                                                                                                          |
+| **Infra**     | AWS EC2 (Backend)<br>AWS S3 (이미지 저장)<br>AWS RDS (MySQL)                                                                           |
 
 
 🧬 시스템 아키텍처
@@ -85,10 +84,11 @@ Friend API
 
 
 2) 빌드 & 실행
-| 단계             | 명령어                                                       |
-| -------------- | --------------------------------------------------------- |
-| **프로젝트 빌드**    | `bash<br>./gradlew build<br>`                             |
-| **실행(JAR 실행)** | `bash<br>java -jar build/libs/photodiary-backend.jar<br>` |
+| 단계          | 명령어                                           |
+| ----------- | --------------------------------------------- |
+| **프로젝트 빌드** | `./gradlew build`                             |
+| **JAR 실행**  | `java -jar build/libs/photodiary-backend.jar` |
+
 
 
 
